@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Municipal-Elections-Management-System")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d8996885835747810f044ea2910ea89d40d4ee48")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+634cae85598d31d5cae78bbed325aa0cb820236b")]
 [assembly: System.Reflection.AssemblyProductAttribute("Municipal-Elections-Management-System")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Municipal-Elections-Management-System")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
