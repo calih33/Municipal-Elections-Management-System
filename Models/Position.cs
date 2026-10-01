@@ -13,6 +13,9 @@ public class Position
         SchoolTrustee
     }
 
+    // add the number of positions available for this type
+    public int NumberOfPositions { get; set; }
+
     public PositionType? Type { get; set; }
     public string? Description { get; set; }
     public int? MunicipalityId { get; set; }

@@ -4,7 +4,7 @@ using Municipal_Elections_Management_System.Data;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddRazorPages();
+builder.Services.AddControllersWithViews();
 
 string connStr = builder.Configuration.GetConnectionString("DefaultConnection")!;
 builder.Services.AddDbContext<ApplicationDbContext>(

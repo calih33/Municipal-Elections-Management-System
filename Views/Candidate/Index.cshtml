@@ -1,0 +1,47 @@
+@model IEnumerable<Candidate>
+
+@{
+    ViewData["Title"] = "Candidates";
+}
+
+<h1>Candidates</h1>
+
+@if (!Model.Any())
+{
+    <p>No candidates have been added yet.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Photo</th>
+                <th>Name</th>
+                <th>Position</th>
+                <th>Municipality</th>
+                <th>Website</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var candidate in Model)
+            {
+                <tr>
+                    <td>
+                        @if (!string.IsNullOrWhiteSpace(candidate.Image))
+                        {
+                            <img src="~/images/@candidate.Image" alt="Photo of @candidate.FirstName @candidate.LastName" class="candidate-photo" />
+                        }
+                        else
+                        {
+                            <span class="text-muted">No photo</span>
+                        }
+                    </td>
+                    <td>@candidate.FirstName @candidate.LastName</td>
+                    <td>@candidate.Position</td>
+                    <td>@candidate.Municipality?.Name</td>
+                    <td>@candidate.URL</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

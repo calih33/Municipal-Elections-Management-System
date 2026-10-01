@@ -59,7 +59,8 @@ public static class SeedData
                 PositionId=1,
                 Type=Position.PositionType.Mayor,
                 MunicipalityId=1,
-                Description="The Mayor is the head of the municipal government, responsible for leading the council, representing the municipality, and ensuring the effective administration of local policies and services."
+                Description="The Mayor is the head of the municipal government, responsible for leading the council, representing the municipality, and ensuring the effective administration of local policies and services.",
+                NumberOfPositions=1
 
             },
         };
