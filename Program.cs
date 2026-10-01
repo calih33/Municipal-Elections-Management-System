@@ -1,7 +1,15 @@
+using Microsoft.EntityFrameworkCore;
+using Municipal_Elections_Management_System.Data;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
+builder.Services.AddRazorPages();
+
+string connStr = builder.Configuration.GetConnectionString("DefaultConnection")!;
+builder.Services.AddDbContext<ApplicationDbContext>(
+    options => options.UseSqlite(connStr)
+);
 
 var app = builder.Build();
 

@@ -10,10 +10,12 @@ public class Candidate
     public string? Position { get; set; }
     public string? URL { get; set; }
     public string? Image { get; set; }
-    public string? PositionId { get; set; }
+
+    public string? Description { get; set; }
+    public int? PositionId { get; set; }
 
     [ForeignKey("PositionId")]
-    public string? MunicipalityId { get; set; }
+    public int? MunicipalityId { get; set; }
 
     [ForeignKey("MunicipalityId")]
     public Municipality? Municipality { get; set; }

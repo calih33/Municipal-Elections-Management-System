@@ -14,8 +14,8 @@ public class Position
     }
 
     public PositionType? Type { get; set; }
-
-    public string? MunicipalityId { get; set; }
+    public string? Description { get; set; }
+    public int? MunicipalityId { get; set; }
 
     [ForeignKey("MunicipalityId")]
     public Municipality? Municipality { get; set; }
