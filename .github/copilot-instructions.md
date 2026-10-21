@@ -1,0 +1,79 @@
+# Municipal Elections Management System – AI Coding Instructions
+
+These instructions apply to every AI-assisted change in this repository (GitHub Copilot, and Claude Code via `CLAUDE.md`).
+
+## What this app is
+
+An ASP.NET Core MVC site for municipal elections (next election: October 17, 2026).
+
+- **Public site** (anonymous): browse municipalities and positions, search/filter candidates, view candidate profiles, build a personal voting guide and print it.
+- **Admin area** (`/Admin`, login required): dashboard counts plus CRUD for municipalities (with logo upload), positions, and candidates (with photo upload).
+
+## Stack
+
+- .NET 10, ASP.NET Core MVC + Razor Pages (Identity UI only)
+- Entity Framework Core 10, **SQLite**, **Code First** with migrations
+- ASP.NET Core Identity with roles (`IdentityUser`, `IdentityRole`)
+- Bootstrap 5 + jQuery Unobtrusive Validation (already in `wwwroot/lib`)
+- Deployed to Azure App Service (Linux)
+
+## Project layout
+
+| Folder | Contents |
+|---|---|
+| `Models/` | EF entities: `Municipality`, `Position`, `Candidate` |
+| `ViewModels/` | Form and page models (anything with `IFormFile`, dropdown lists, search filters) |
+| `Data/` | `ApplicationDbContext`, `SeedData`, `AppRoles` |
+| `Services/` | Application services, e.g. `MunicipalityAccessService` |
+| `Controllers/` + `Views/` | Public site |
+| `Areas/Admin/` | Admin controllers and views |
+| `Areas/Identity/` | Overridden Identity pages (username login, disabled register) |
+| `Migrations/` | EF Core migrations – generated, never hand-written |
+
+## Conventions
+
+- Namespace root is `Municipal_Elections_Management_System` (underscores). Use file-scoped namespaces.
+- PascalCase for types, members, and files; `_camelCase` is not used – inject dependencies with primary constructors.
+- Nullable reference types are enabled. Don't silence warnings with `!` unless the value is guaranteed.
+- Async all the way: EF calls use `ToListAsync`, `FirstOrDefaultAsync`, `SaveChangesAsync`; method names end in `Async` except controller actions.
+- Use the spec's spelling of positions: "Mayor", "Councilor", "School Trustee".
+
+## Data model rules
+
+- `Municipality 1 → * Position 1 → * Candidate`. A candidate's municipality is `candidate.Position.Municipality`. **Do not add `MunicipalityId` to `Candidate`.**
+- Foreign keys used in forms are `int?` with `[Required]` so an empty "Select…" option fails validation cleanly.
+- `Municipality.AdminRoleName` is set by the system (`AppRoles.ForMunicipality(name)`), never bound from a form.
+- To change the schema: edit the model, then `dotnet ef migrations add <PascalCaseName>`. Never edit a migration that has already been pushed.
+- Seed data lives in `Data/SeedData.cs` and must stay idempotent (only insert what is missing).
+- The connection string lives only in `appsettings.Development.json` (git-ignored) locally and in App Service configuration on Azure. Never put it in `appsettings.json`. Never commit `*.db` files.
+
+## Authorization rules (critical)
+
+- Roles: `AppRoles.SuperAdmin` ("Super Admin") and one group per municipality, `AppRoles.ForMunicipality(name)` (e.g. "Pitt Meadows Admin").
+- Every admin controller has `[Area("Admin")]` and `[Authorize]`.
+- Creating and deleting municipalities: `[Authorize(Roles = AppRoles.SuperAdmin)]`.
+- **Every** admin query for municipalities, positions or candidates is filtered by `IMunicipalityAccessService.GetManageableMunicipalityIdsAsync(User)`.
+- **Every** admin POST re-checks `CanManageAsync(User, municipalityId)` for the record being changed **and** for any new municipality/position chosen in the form. On failure return `Forbid()`. Never trust IDs from hidden fields or dropdowns.
+- Dashboard counts are scoped the same way.
+- Public controllers never require login and never expose admin-only data.
+
+## Validation
+
+- Put data annotations on entities and view models; the same attributes drive client and server validation.
+- Every form view includes `<partial name="_ValidationScriptsPartial" />` in `@section Scripts` and an `asp-validation-summary`.
+- Every POST action has `[ValidateAntiForgeryToken]` and checks `ModelState.IsValid` before saving.
+- Image uploads: `.jpg`, `.jpeg`, `.png`, `.webp` only, max 2 MB, validated on both client and server.
+
+## UI
+
+- Bootstrap 5 classes only; avoid inline styles. Put shared CSS in `wwwroot/css/site.css`.
+- Layouts must work at phone width (use the grid, `table-responsive`, cards).
+- Show a placeholder image when `PhotoFileName` or `LogoFileName` is null.
+- Print pages use a dedicated layout and `@media print` rules; hide navigation and buttons when printing.
+
+## Don't
+
+- Don't add packages without a clear need; prefer what ASP.NET Core already provides.
+- Don't scaffold the full Identity UI; only override the pages we need.
+- Don't use `ViewBag` for data that a view model can carry.
+- Don't catch and swallow exceptions.

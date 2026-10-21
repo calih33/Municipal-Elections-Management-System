@@ -61,6 +61,7 @@ dlldata.c
 BenchmarkDotNet.Artifacts/
 
 # .NET
+appsettings.Development.json
 project.lock.json
 project.fragment.lock.json
 artifacts/
@@ -480,3 +481,9 @@ $RECYCLE.BIN/
 
 # Vim temporary swap files
 *.swp
+
+# Local SQLite database and user-uploaded images
+*.db
+*.db-shm
+*.db-wal
+wwwroot/uploads/
