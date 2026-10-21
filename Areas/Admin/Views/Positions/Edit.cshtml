@@ -1,0 +1,22 @@
+@model Position
+
+@{
+    ViewData["Title"] = "Edit Position";
+}
+
+<h1>@ViewData["Title"]</h1>
+<hr />
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Edit" method="post">
+            <input type="hidden" asp-for="PositionId" />
+            <partial name="_Form" model="Model" />
+            <input type="submit" value="Save" class="btn btn-warning" />
+            <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

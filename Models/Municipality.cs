@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
 namespace Municipal_Elections_Management_System.Models;
@@ -26,6 +27,11 @@ public class Municipality
     [StringLength(255)]
     [Display(Name = "Logo")]
     public string? LogoFileName { get; set; }
+
+    // uploaded logo, saved as a file (not a db column)
+    [NotMapped]
+    [Display(Name = "Logo")]
+    public IFormFile? LogoFile { get; set; }
 
     // Identity role whose members administer this municipality (e.g. "Pitt Meadows Admin").
     // Set by the system when the municipality is created, never from a form.

@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = Model.Name;
 
+    // placeholder if no photo
     var photo = Model.PhotoFileName == null
         ? Url.Content("~/images/placeholder-candidate.svg")
         : Url.Content($"~/uploads/{Model.PhotoFileName}");

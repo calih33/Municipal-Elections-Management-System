@@ -1,0 +1,27 @@
+@model Position
+
+@{
+    ViewData["Title"] = "Position Details";
+}
+
+<h1>@ViewData["Title"]</h1>
+<hr />
+<dl class="row">
+    <dt class="col-sm-3">@Html.DisplayNameFor(model => model.MunicipalityId)</dt>
+    <dd class="col-sm-9">@Model.Municipality?.Name</dd>
+    <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Name)</dt>
+    <dd class="col-sm-9">@Model.Name</dd>
+    <dt class="col-sm-3">@Html.DisplayNameFor(model => model.SeatsAvailable)</dt>
+    <dd class="col-sm-9">@Model.SeatsAvailable</dd>
+</dl>
+
+<h4>Candidates</h4>
+<ul class="list-group mb-3">
+    @foreach (var candidate in Model.Candidates.OrderBy(c => c.Name))
+    {
+        <li class="list-group-item">@candidate.Name</li>
+    }
+</ul>
+
+<a asp-action="Edit" asp-route-id="@Model.PositionId" class="btn btn-warning">Edit</a>
+<a asp-action="Index" class="btn btn-secondary">Back to List</a>

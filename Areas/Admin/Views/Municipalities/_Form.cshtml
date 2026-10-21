@@ -1,0 +1,39 @@
+@model Municipality
+
+@* fields for create and edit *@
+
+<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+<div class="mb-3">
+    <label asp-for="Name" class="form-label"></label>
+    <input asp-for="Name" class="form-control" />
+    <span asp-validation-for="Name" class="text-danger"></span>
+</div>
+<div class="mb-3">
+    <label asp-for="Province" class="form-label"></label>
+    <input asp-for="Province" class="form-control" />
+    <span asp-validation-for="Province" class="text-danger"></span>
+</div>
+<div class="mb-3">
+    <label asp-for="ElectionDate" class="form-label"></label>
+    <input asp-for="ElectionDate" class="form-control" />
+    <span asp-validation-for="ElectionDate" class="text-danger"></span>
+</div>
+<div class="mb-3">
+    <label asp-for="Description" class="form-label"></label>
+    <textarea asp-for="Description" class="form-control" rows="4"></textarea>
+    <span asp-validation-for="Description" class="text-danger"></span>
+</div>
+<div class="mb-3">
+    <label asp-for="LogoFile" class="form-label"></label>
+    @if (Model.LogoFileName != null)
+    {
+        <div class="mb-2">
+            <img src="@Url.Content($"~/uploads/{Model.LogoFileName}")" alt="Current logo" width="96" height="96" class="object-fit-contain" />
+            <div class="form-text">Pick a new file to replace the current logo.</div>
+        </div>
+    }
+    <input asp-for="LogoFile" type="file" class="form-control" accept=".jpg,.jpeg,.png,.webp" />
+    <div class="form-text">.jpg, .jpeg, .png or .webp, 2 MB max</div>
+    <span asp-validation-for="LogoFile" class="text-danger"></span>
+</div>

@@ -38,6 +38,7 @@
             <tbody>
                 @foreach (var candidate in municipality)
                 {
+                    // placeholder if no photo
                     var photo = candidate.PhotoFileName == null
                         ? Url.Content("~/images/placeholder-candidate.svg")
                         : Url.Content($"~/uploads/{candidate.PhotoFileName}");

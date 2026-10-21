@@ -27,7 +27,7 @@ public class VotingGuideController : Controller
     // GET: VotingGuide/Print
     public async Task<IActionResult> Print()
     {
-        // azure runs on UTC time so change it to vancouver time for the print date
+        // azure is in UTC, use vancouver time
         ViewData["PrintDate"] = TimeZoneInfo.ConvertTimeBySystemTimeZoneId(DateTime.UtcNow, "America/Vancouver");
 
         return View(await GetSelectedCandidatesAsync());
@@ -44,7 +44,7 @@ public class VotingGuideController : Controller
             return NotFound();
         }
 
-        // save the candidate id in the cookie
+        // save id in the cookie
         _votingGuide.Add(id);
         TempData["Message"] = $"{candidate.Name} was added to your voting guide.";
 
@@ -73,22 +73,22 @@ public class VotingGuideController : Controller
         return RedirectToAction(nameof(Index));
     }
 
-    // go back to the page the user was on, only if it is a page on our site
+    // go back to the page the user was on (our site only)
     private IActionResult RedirectBack(string? returnUrl)
     {
         if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
         {
-            return LocalRedirect(returnUrl);
+            return Redirect(returnUrl);
         }
 
         return RedirectToAction(nameof(Index));
     }
 
+    // picked candidates with position and municipality
     private async Task<List<Candidate>> GetSelectedCandidatesAsync()
     {
         var ids = _votingGuide.GetIds();
 
-        // get the candidates that match the ids saved in the cookie
         return await _context.Candidates
             .Include(c => c.Position)
                 .ThenInclude(p => p!.Municipality)
