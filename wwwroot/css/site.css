@@ -9,7 +9,7 @@ html {
 }
 
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #9FB4D8;
 }
 
 html {
@@ -28,4 +28,56 @@ body {
 
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
   text-align: start;
+}
+/* ---------- colours from the vss clinician ui ---------- */
+:root {
+  --bs-body-font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --bs-body-color: #1E2B45;
+  --bs-body-color-rgb: 30, 43, 69;
+  --bs-body-bg: #F8FAFD;
+  --bs-secondary-color: #51637E;
+  --bs-tertiary-bg: #F2F6FC;
+  --bs-border-color: #D7DFEC;
+  --bs-primary: #2E4A7E;
+  --bs-primary-rgb: 46, 74, 126;
+  --bs-link-color: #2E4A7E;
+  --bs-link-color-rgb: 46, 74, 126;
+  --bs-link-hover-color: #1F3560;
+  --bs-link-hover-color-rgb: 31, 53, 96;
+}
+
+/* navy main buttons */
+.btn-primary {
+  --bs-btn-bg: #2E4A7E;
+  --bs-btn-border-color: #2E4A7E;
+  --bs-btn-hover-bg: #1F3560;
+  --bs-btn-hover-border-color: #1F3560;
+  --bs-btn-active-bg: #1F3560;
+  --bs-btn-active-border-color: #1F3560;
+}
+
+/* white buttons with a light border */
+.btn-secondary {
+  --bs-btn-color: #334663;
+  --bs-btn-bg: #FFFFFF;
+  --bs-btn-border-color: #C8D4E6;
+  --bs-btn-hover-color: #1E2B45;
+  --bs-btn-hover-bg: #F2F6FC;
+  --bs-btn-hover-border-color: #9FB4D8;
+  --bs-btn-active-color: #1E2B45;
+  --bs-btn-active-bg: #E2E8F2;
+  --bs-btn-active-border-color: #9FB4D8;
+}
+
+/* light blue details buttons */
+.btn-info {
+  --bs-btn-color: #2E4A7E;
+  --bs-btn-bg: #EDF2FA;
+  --bs-btn-border-color: #C8D4E6;
+  --bs-btn-hover-color: #1F3560;
+  --bs-btn-hover-bg: #E2E8F2;
+  --bs-btn-hover-border-color: #9FB4D8;
+  --bs-btn-active-color: #1F3560;
+  --bs-btn-active-bg: #E2E8F2;
+  --bs-btn-active-border-color: #9FB4D8;
 }
