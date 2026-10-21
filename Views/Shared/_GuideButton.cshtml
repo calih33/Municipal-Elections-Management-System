@@ -1,0 +1,23 @@
+@model Candidate
+@inject VotingGuideService VotingGuide
+
+@* add to guide / remove button, used on the candidate list and details page *@
+@{
+    var inGuide = VotingGuide.GetIds().Contains(Model.CandidateId);
+    var returnUrl = Context.Request.Path + Context.Request.QueryString;
+}
+
+@if (inGuide)
+{
+    <form asp-area="" asp-controller="VotingGuide" asp-action="Remove" asp-route-id="@Model.CandidateId"
+          asp-route-returnUrl="@returnUrl" method="post" class="d-inline">
+        <button type="submit" class="btn btn-sm btn-danger">Remove from guide</button>
+    </form>
+}
+else
+{
+    <form asp-area="" asp-controller="VotingGuide" asp-action="Add" asp-route-id="@Model.CandidateId"
+          asp-route-returnUrl="@returnUrl" method="post" class="d-inline">
+        <button type="submit" class="btn btn-sm btn-success">Add to guide</button>
+    </form>
+}

@@ -1,0 +1,12 @@
+@model IEnumerable<Municipality>
+
+@{
+    ViewData["Title"] = "Municipalities";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+@foreach (var item in Model)
+{
+    <partial name="_MunicipalityCard" model="item" />
+}

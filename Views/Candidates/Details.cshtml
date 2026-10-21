@@ -1,0 +1,46 @@
+@model Candidate
+
+@{
+    ViewData["Title"] = Model.Name;
+
+    var photo = Model.PhotoFileName == null
+        ? Url.Content("~/images/placeholder-candidate.svg")
+        : Url.Content($"~/uploads/{Model.PhotoFileName}");
+}
+
+<div class="row g-4">
+    <div class="col-12 col-md-4">
+        <img src="@photo" alt="Photo of @Model.Name" class="img-fluid rounded" />
+    </div>
+    <div class="col-12 col-md-8">
+        <h1>@Model.Name</h1>
+        <p class="lead">@Model.Position?.Name</p>
+        <p>
+            <a asp-controller="Municipalities" asp-action="Details" asp-route-id="@Model.Position?.MunicipalityId">@Model.Position?.Municipality?.Name</a>
+            &middot; Election Date: @Model.Position?.Municipality?.ElectionDate.ToString("MMMM d, yyyy")
+        </p>
+
+        <h5>@Html.DisplayNameFor(model => model.Profile)</h5>
+        <p>@Model.Profile</p>
+
+        <dl class="row">
+            @if (!string.IsNullOrEmpty(Model.Website))
+            {
+                <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Website)</dt>
+                <dd class="col-sm-8"><a href="@Model.Website" target="_blank" rel="noopener">@Model.Website</a></dd>
+            }
+            @if (!string.IsNullOrEmpty(Model.Email))
+            {
+                <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Email)</dt>
+                <dd class="col-sm-8"><a href="mailto:@Model.Email">@Model.Email</a></dd>
+            }
+            <dt class="col-sm-4">@Html.DisplayNameFor(model => model.DateCreated)</dt>
+            <dd class="col-sm-8">@Model.DateCreated.ToString("MMMM d, yyyy")</dd>
+        </dl>
+
+        <div class="d-flex flex-wrap gap-2">
+            <partial name="_GuideButton" model="Model" />
+            <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+        </div>
+    </div>
+</div>
