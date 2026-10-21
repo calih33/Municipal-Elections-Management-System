@@ -22,6 +22,10 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options =>
 
 builder.Services.AddScoped<IMunicipalityAccessService, MunicipalityAccessService>();
 
+// voting guide uses a cookie so it needs the current request
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<VotingGuideService>();
+
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 

@@ -1,0 +1,38 @@
+@model Municipality
+
+@* one card for a municipality, used on the list and details page *@
+
+@{
+    var logo = Model.LogoFileName == null
+        ? Url.Content("~/images/placeholder-logo.svg")
+        : Url.Content($"~/uploads/{Model.LogoFileName}");
+}
+
+<div class="card mb-4">
+    <div class="card-body">
+        <div class="d-flex align-items-center gap-3 mb-3">
+            <img src="@logo" alt="@Model.Name logo" width="64" height="64" class="object-fit-contain" />
+            <div>
+                <h5 class="card-title mb-0">@Model.Name</h5>
+                <small class="text-body-secondary">@Model.Province</small>
+            </div>
+        </div>
+        @if (!string.IsNullOrEmpty(Model.Description))
+        {
+            <p class="card-text">@Model.Description</p>
+        }
+        <p class="card-text"><small class="text-body-secondary">Election Date: @Model.ElectionDate.ToString("MMMM d, yyyy")</small></p>
+    </div>
+    <ul class="list-group list-group-flush">
+        @foreach (var position in Model.Positions.OrderBy(p => p.Name))
+        {
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <span>@position.Name: @position.SeatsAvailable @(position.SeatsAvailable == 1 ? "seat" : "seats")</span>
+                <a asp-controller="Candidates" asp-action="Index"
+                   asp-route-municipalityId="@Model.MunicipalityId"
+                   asp-route-positionId="@position.PositionId"
+                   class="btn btn-sm btn-primary">View candidates</a>
+            </li>
+        }
+    </ul>
+</div>

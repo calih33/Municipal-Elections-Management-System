@@ -1,0 +1,74 @@
+@model IEnumerable<Candidate>
+
+@{
+    ViewData["Title"] = "Candidates";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<form asp-action="Index" method="get" id="filterForm" class="row g-2 align-items-end mb-4">
+    <div class="col-12 col-md-4">
+        <label for="search" class="form-label">Candidate name</label>
+        <input type="search" id="search" name="search" value="@ViewData["Search"]" class="form-control" placeholder="Please type candidate name..." />
+    </div>
+    <div class="col-12 col-sm-6 col-md-3">
+        <label for="municipalityId" class="form-label">Municipality</label>
+        <select id="municipalityId" name="municipalityId" class="form-select" asp-items="ViewBag.MunicipalityId">
+            <option value="">All municipalities</option>
+        </select>
+    </div>
+    <div class="col-12 col-sm-6 col-md-3">
+        <label for="positionId" class="form-label">Position</label>
+        <select id="positionId" name="positionId" class="form-select" asp-items="ViewBag.PositionId">
+            <option value="">All positions</option>
+        </select>
+    </div>
+    <div class="col-12 col-md-2 d-flex gap-2">
+        <button type="submit" class="btn btn-primary">Search</button>
+        <a asp-action="Index" class="btn btn-secondary">Reset</a>
+    </div>
+</form>
+
+<p>@Model.Count() candidate(s) found</p>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">No candidates match your search.</div>
+}
+
+<div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-4">
+    @foreach (var item in Model)
+    {
+        var photo = item.PhotoFileName == null
+            ? Url.Content("~/images/placeholder-candidate.svg")
+            : Url.Content($"~/uploads/{item.PhotoFileName}");
+
+        <div class="col">
+            <div class="card h-100">
+                <img src="@photo" alt="Photo of @item.Name" class="card-img-top object-fit-cover" height="200" />
+                <div class="card-body">
+                    <h5 class="card-title">@item.Name</h5>
+                    <p class="card-text">@item.Position?.Name<br /><small class="text-body-secondary">@item.Position?.Municipality?.Name</small></p>
+                </div>
+                <div class="card-footer d-flex flex-wrap gap-2">
+                    <a asp-action="Details" asp-route-id="@item.CandidateId" class="btn btn-sm btn-info">Details</a>
+                    <partial name="_GuideButton" model="item" />
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        // when the municipality changes, clear the position and reload the list
+        document.getElementById("municipalityId").addEventListener("change", function () {
+            document.getElementById("positionId").value = "";
+            document.getElementById("filterForm").submit();
+        });
+        // when the position changes, reload the list
+        document.getElementById("positionId").addEventListener("change", function () {
+            document.getElementById("filterForm").submit();
+        });
+    </script>
+}

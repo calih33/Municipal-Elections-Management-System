@@ -1,0 +1,55 @@
+@model List<Candidate>
+
+@{
+    Layout = "_PrintLayout";
+    ViewData["Title"] = "My Voting Guide";
+
+    var printDate = (DateTime)ViewData["PrintDate"]!;
+    var byMunicipality = Model.GroupBy(c => c.Position!.Municipality!);
+}
+
+<div class="d-print-none mb-4">
+    <button type="button" class="btn btn-primary" onclick="window.print()">Print</button>
+    <a asp-action="Index" class="btn btn-secondary">Back to my guide</a>
+</div>
+
+<h1>My Voting Guide</h1>
+<p>Printed: @printDate.ToString("MMMM d, yyyy h:mm tt")</p>
+
+@if (!Model.Any())
+{
+    <p>You haven't selected any candidates yet.</p>
+}
+
+@foreach (var municipality in byMunicipality)
+{
+    <div class="mb-4">
+        <h4>@municipality.Key.Name</h4>
+        <p>Election Date: @municipality.Key.ElectionDate.ToString("dddd, MMMM d, yyyy")</p>
+
+        <table class="table table-bordered align-middle">
+            <thead>
+                <tr>
+                    <th>Photo</th>
+                    <th>Candidate</th>
+                    <th>Position</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var candidate in municipality)
+                {
+                    var photo = candidate.PhotoFileName == null
+                        ? Url.Content("~/images/placeholder-candidate.svg")
+                        : Url.Content($"~/uploads/{candidate.PhotoFileName}");
+
+                    <tr>
+                        <td><img src="@photo" alt="Photo of @candidate.Name" width="48" height="48" class="rounded object-fit-cover" /></td>
+                        <td>@candidate.Name</td>
+                        <td>@candidate.Position!.Name</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+

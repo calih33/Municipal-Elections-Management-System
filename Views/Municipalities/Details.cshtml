@@ -1,0 +1,9 @@
+@model Municipality
+
+@{
+    ViewData["Title"] = Model.Name;
+}
+
+<partial name="_MunicipalityCard" model="Model" />
+
+<a asp-action="Index" class="btn btn-secondary">Back to List</a>

@@ -1,8 +1,10 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+@{
+    ViewData["Title"] = "Home";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="p-5 mb-4 bg-body-tertiary rounded-3">
+    <h1 class="display-5 fw-bold">Municipal Elections 2026</h1>
+    <p class="col-md-8 fs-4">Election day is Saturday, October 17, 2026. Browse the candidates in your municipality and print your own voting guide.</p>
+    <a asp-controller="Candidates" asp-action="Index" class="btn btn-primary btn-lg">Browse candidates</a>
+    <a asp-controller="Municipalities" asp-action="Index" class="btn btn-secondary btn-lg">Municipalities</a>
 </div>
