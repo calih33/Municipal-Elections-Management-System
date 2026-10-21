@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Municipal_Elections_Management_System.Models;
 
@@ -22,6 +23,11 @@ public class Candidate
     [StringLength(255)]
     [Display(Name = "Photo")]
     public string? PhotoFileName { get; set; }
+
+    // uploaded photo, saved as a file (not a db column)
+    [NotMapped]
+    [Display(Name = "Photograph")]
+    public IFormFile? PhotoFile { get; set; }
 
     [Url]
     [StringLength(200)]

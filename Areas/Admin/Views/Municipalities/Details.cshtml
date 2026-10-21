@@ -1,0 +1,37 @@
+@model Municipality
+
+@{
+    ViewData["Title"] = "Municipality Details";
+    // placeholder if no logo
+    var logo = Model.LogoFileName == null
+        ? Url.Content("~/images/placeholder-logo.svg")
+        : Url.Content($"~/uploads/{Model.LogoFileName}");
+}
+
+<h1>@ViewData["Title"]</h1>
+<hr />
+<dl class="row">
+    <dt class="col-sm-3">@Html.DisplayNameFor(model => model.LogoFileName)</dt>
+    <dd class="col-sm-9"><img src="@logo" alt="@Model.Name logo" width="96" height="96" class="object-fit-contain" /></dd>
+    <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Name)</dt>
+    <dd class="col-sm-9">@Model.Name</dd>
+    <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Province)</dt>
+    <dd class="col-sm-9">@Model.Province</dd>
+    <dt class="col-sm-3">@Html.DisplayNameFor(model => model.ElectionDate)</dt>
+    <dd class="col-sm-9">@Model.ElectionDate.ToString("MMMM d, yyyy")</dd>
+    <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Description)</dt>
+    <dd class="col-sm-9">@Model.Description</dd>
+    <dt class="col-sm-3">@Html.DisplayNameFor(model => model.AdminRoleName)</dt>
+    <dd class="col-sm-9">@Model.AdminRoleName</dd>
+</dl>
+
+<h4>Positions</h4>
+<ul class="list-group mb-3">
+    @foreach (var position in Model.Positions.OrderBy(p => p.Name))
+    {
+        <li class="list-group-item">@position.Name: @position.SeatsAvailable seats, @position.Candidates.Count candidates</li>
+    }
+</ul>
+
+<a asp-action="Edit" asp-route-id="@Model.MunicipalityId" class="btn btn-warning">Edit</a>
+<a asp-action="Index" class="btn btn-secondary">Back to List</a>

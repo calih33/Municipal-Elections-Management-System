@@ -16,7 +16,7 @@ public class CandidatesController : Controller
     }
 
     // GET: Candidates
-    // search, municipalityId and positionId come from the filter form in the url
+    // filter values come from the url
     public async Task<IActionResult> Index(string? search, int? municipalityId, int? positionId)
     {
         var candidates = _context.Candidates
@@ -26,12 +26,12 @@ public class CandidatesController : Controller
 
         if (!string.IsNullOrWhiteSpace(search))
         {
-            // lower case both sides so "chen" still finds "Chen"
+            // lower case so "chen" finds "Chen"
             var name = search.Trim().ToLower();
             candidates = candidates.Where(c => c.Name.ToLower().Contains(name));
         }
 
-        // only show candidates running in this municipality
+        // filter by municipality
         if (municipalityId != null)
         {
             candidates = candidates.Where(c => c.Position!.MunicipalityId == municipalityId);
@@ -42,13 +42,13 @@ public class CandidatesController : Controller
             candidates = candidates.Where(c => c.PositionId == positionId);
         }
 
-        // dropdowns for the filter form
+        // filter dropdowns
         ViewData["MunicipalityId"] = new SelectList(
             await _context.Municipalities.OrderBy(m => m.Name).ToListAsync(),
             "MunicipalityId", "Name", municipalityId);
 
         var positions = _context.Positions.Include(p => p.Municipality).AsQueryable();
-        // if a municipality is picked, only list its positions
+        // only that municipality's positions
         if (municipalityId != null)
         {
             positions = positions.Where(p => p.MunicipalityId == municipalityId);

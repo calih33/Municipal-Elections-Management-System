@@ -1,8 +1,9 @@
 @model Municipality
 
-@* one card for a municipality, used on the list and details page *@
+@* municipality card for list and details *@
 
 @{
+    // placeholder if no logo
     var logo = Model.LogoFileName == null
         ? Url.Content("~/images/placeholder-logo.svg")
         : Url.Content($"~/uploads/{Model.LogoFileName}");

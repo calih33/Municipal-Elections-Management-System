@@ -1,0 +1,30 @@
+@model Position
+
+@{
+    ViewData["Title"] = "Delete Position";
+}
+
+<h1>@ViewData["Title"]</h1>
+<h3>Are you sure you want to delete this?</h3>
+
+@if (Model.Candidates.Any())
+{
+    <div class="alert alert-warning">
+        This will also delete the @Model.Candidates.Count candidates running for this position.
+    </div>
+}
+
+<dl class="row">
+    <dt class="col-sm-3">@Html.DisplayNameFor(model => model.MunicipalityId)</dt>
+    <dd class="col-sm-9">@Model.Municipality?.Name</dd>
+    <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Name)</dt>
+    <dd class="col-sm-9">@Model.Name</dd>
+    <dt class="col-sm-3">@Html.DisplayNameFor(model => model.SeatsAvailable)</dt>
+    <dd class="col-sm-9">@Model.SeatsAvailable</dd>
+</dl>
+
+<form asp-action="Delete" method="post">
+    <input type="hidden" asp-for="PositionId" />
+    <input type="submit" value="Delete" class="btn btn-danger" />
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</form>

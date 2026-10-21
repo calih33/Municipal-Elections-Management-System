@@ -17,7 +17,7 @@ public class MunicipalitiesController : Controller
     // GET: Municipalities
     public async Task<IActionResult> Index()
     {
-        // include the positions so the card can list them
+        // include positions for the card
         var municipalities = await _context.Municipalities
             .Include(m => m.Positions)
             .OrderBy(m => m.Name)

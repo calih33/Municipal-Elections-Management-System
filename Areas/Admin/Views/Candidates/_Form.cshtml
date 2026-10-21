@@ -1,0 +1,47 @@
+@model Candidate
+
+@* fields for create and edit *@
+
+<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+<div class="mb-3">
+    <label asp-for="Name" class="form-label"></label>
+    <input asp-for="Name" class="form-control" />
+    <span asp-validation-for="Name" class="text-danger"></span>
+</div>
+<div class="mb-3">
+    <label asp-for="PositionId" class="form-label"></label>
+    <select asp-for="PositionId" class="form-select" asp-items="ViewBag.PositionId">
+        <option value="">-- Select Position --</option>
+    </select>
+    <span asp-validation-for="PositionId" class="text-danger"></span>
+</div>
+<div class="mb-3">
+    <label asp-for="Profile" class="form-label"></label>
+    <textarea asp-for="Profile" class="form-control" rows="6"></textarea>
+    <div class="form-text">@Candidate.ProfileMaxLength characters max</div>
+    <span asp-validation-for="Profile" class="text-danger"></span>
+</div>
+<div class="mb-3">
+    <label asp-for="Website" class="form-label"></label>
+    <input asp-for="Website" class="form-control" placeholder="https://" />
+    <span asp-validation-for="Website" class="text-danger"></span>
+</div>
+<div class="mb-3">
+    <label asp-for="Email" class="form-label"></label>
+    <input asp-for="Email" class="form-control" />
+    <span asp-validation-for="Email" class="text-danger"></span>
+</div>
+<div class="mb-3">
+    <label asp-for="PhotoFile" class="form-label"></label>
+    @if (Model.PhotoFileName != null)
+    {
+        <div class="mb-2">
+            <img src="@Url.Content($"~/uploads/{Model.PhotoFileName}")" alt="Current photo" width="96" height="96" class="rounded object-fit-cover" />
+            <div class="form-text">Pick a new file to replace the current photo.</div>
+        </div>
+    }
+    <input asp-for="PhotoFile" type="file" class="form-control" accept=".jpg,.jpeg,.png,.webp" />
+    <div class="form-text">.jpg, .jpeg, .png or .webp, 2 MB max</div>
+    <span asp-validation-for="PhotoFile" class="text-danger"></span>
+</div>

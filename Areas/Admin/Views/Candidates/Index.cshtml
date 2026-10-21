@@ -1,0 +1,49 @@
+@model IEnumerable<Candidate>
+
+@{
+    ViewData["Title"] = "Manage Candidates";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-success">Create New</a>
+    <a asp-controller="Dashboard" asp-action="Index" class="btn btn-secondary">Back to Dashboard</a>
+</p>
+
+<div class="table-responsive">
+    <table class="table table-striped table-bordered align-middle">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.PhotoFileName)</th>
+                <th>@Html.DisplayNameFor(model => model.Name)</th>
+                <th>Municipality</th>
+                <th>@Html.DisplayNameFor(model => model.PositionId)</th>
+                <th>@Html.DisplayNameFor(model => model.DateCreated)</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                // placeholder if no photo
+                var photo = item.PhotoFileName == null
+                    ? Url.Content("~/images/placeholder-candidate.svg")
+                    : Url.Content($"~/uploads/{item.PhotoFileName}");
+
+                <tr>
+                    <td><img src="@photo" alt="Photo of @item.Name" width="48" height="48" class="rounded object-fit-cover" /></td>
+                    <td>@item.Name</td>
+                    <td>@item.Position?.Municipality?.Name</td>
+                    <td>@item.Position?.Name</td>
+                    <td>@item.DateCreated.ToString("yyyy-MM-dd")</td>
+                    <td class="text-nowrap">
+                        <a asp-action="Edit" asp-route-id="@item.CandidateId" class="btn btn-sm btn-warning">Edit</a>
+                        <a asp-action="Details" asp-route-id="@item.CandidateId" class="btn btn-sm btn-info">Details</a>
+                        <a asp-action="Delete" asp-route-id="@item.CandidateId" class="btn btn-sm btn-danger">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,33 @@
+@model Candidate
+
+@{
+    ViewData["Title"] = "Candidate Details";
+    // placeholder if no photo
+    var photo = Model.PhotoFileName == null
+        ? Url.Content("~/images/placeholder-candidate.svg")
+        : Url.Content($"~/uploads/{Model.PhotoFileName}");
+}
+
+<h1>@ViewData["Title"]</h1>
+<hr />
+<dl class="row">
+    <dt class="col-sm-3">@Html.DisplayNameFor(model => model.PhotoFileName)</dt>
+    <dd class="col-sm-9"><img src="@photo" alt="Photo of @Model.Name" width="150" height="150" class="rounded object-fit-cover" /></dd>
+    <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Name)</dt>
+    <dd class="col-sm-9">@Model.Name</dd>
+    <dt class="col-sm-3">Municipality</dt>
+    <dd class="col-sm-9">@Model.Position?.Municipality?.Name</dd>
+    <dt class="col-sm-3">@Html.DisplayNameFor(model => model.PositionId)</dt>
+    <dd class="col-sm-9">@Model.Position?.Name</dd>
+    <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Profile)</dt>
+    <dd class="col-sm-9">@Model.Profile</dd>
+    <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Website)</dt>
+    <dd class="col-sm-9">@Model.Website</dd>
+    <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Email)</dt>
+    <dd class="col-sm-9">@Model.Email</dd>
+    <dt class="col-sm-3">@Html.DisplayNameFor(model => model.DateCreated)</dt>
+    <dd class="col-sm-9">@Model.DateCreated.ToString("MMMM d, yyyy")</dd>
+</dl>
+
+<a asp-action="Edit" asp-route-id="@Model.CandidateId" class="btn btn-warning">Edit</a>
+<a asp-action="Index" class="btn btn-secondary">Back to List</a>

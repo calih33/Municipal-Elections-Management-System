@@ -3,7 +3,7 @@
 @{
     ViewData["Title"] = "My Voting Guide";
 
-    // group the picked candidates by municipality
+    // group by municipality
     var byMunicipality = Model.GroupBy(c => c.Position!.Municipality!);
 }
 
@@ -55,6 +55,7 @@
                 <ul class="list-group mb-3">
                     @foreach (var candidate in position)
                     {
+                        // placeholder if no photo
                         var photo = candidate.PhotoFileName == null
                             ? Url.Content("~/images/placeholder-candidate.svg")
                             : Url.Content($"~/uploads/{candidate.PhotoFileName}");

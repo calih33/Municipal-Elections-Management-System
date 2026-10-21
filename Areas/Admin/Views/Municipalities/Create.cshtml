@@ -1,0 +1,22 @@
+@model Municipality
+
+@{
+    ViewData["Title"] = "Create Municipality";
+}
+
+<h1>@ViewData["Title"]</h1>
+<hr />
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Create" method="post" enctype="multipart/form-data">
+            <partial name="_Form" model="Model" />
+            <input type="submit" value="Create" class="btn btn-success" />
+            <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/image-validation.js" asp-append-version="true"></script>
+}

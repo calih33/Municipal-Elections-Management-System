@@ -39,6 +39,7 @@
 <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-4">
     @foreach (var item in Model)
     {
+        // placeholder if no photo
         var photo = item.PhotoFileName == null
             ? Url.Content("~/images/placeholder-candidate.svg")
             : Url.Content($"~/uploads/{item.PhotoFileName}");
@@ -61,12 +62,12 @@
 
 @section Scripts {
     <script>
-        // when the municipality changes, clear the position and reload the list
+        // new municipality: clear position and reload
         document.getElementById("municipalityId").addEventListener("change", function () {
             document.getElementById("positionId").value = "";
             document.getElementById("filterForm").submit();
         });
-        // when the position changes, reload the list
+        // new position: reload
         document.getElementById("positionId").addEventListener("change", function () {
             document.getElementById("filterForm").submit();
         });

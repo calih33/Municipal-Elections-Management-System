@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using Municipal_Elections_Management_System.Data;
 using Municipal_Elections_Management_System.Services;
 
@@ -22,9 +23,12 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options =>
 
 builder.Services.AddScoped<IMunicipalityAccessService, MunicipalityAccessService>();
 
-// voting guide uses a cookie so it needs the current request
+// voting guide cookie
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<VotingGuideService>();
+
+// image uploads
+builder.Services.AddSingleton<ImageStorageService>();
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
@@ -42,6 +46,14 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+// serve uploaded images at /uploads
+var imageStorage = app.Services.GetRequiredService<ImageStorageService>();
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(imageStorage.RootPath),
+    RequestPath = "/uploads"
+});
 app.UseRouting();
 
 app.UseAuthentication();

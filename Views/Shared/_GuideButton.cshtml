@@ -1,7 +1,7 @@
 @model Candidate
 @inject VotingGuideService VotingGuide
 
-@* add to guide / remove button, used on the candidate list and details page *@
+@* add / remove guide button *@
 @{
     var inGuide = VotingGuide.GetIds().Contains(Model.CandidateId);
     var returnUrl = Context.Request.Path + Context.Request.QueryString;
