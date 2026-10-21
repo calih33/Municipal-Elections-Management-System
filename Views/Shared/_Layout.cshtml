@@ -1,4 +1,10 @@
 ﻿@inject VotingGuideService VotingGuide
+@{
+    // which tab is open, used to highlight it in the navbar
+    var area = ViewContext.RouteData.Values["area"]?.ToString();
+    var controller = ViewContext.RouteData.Values["controller"]?.ToString();
+    var isAdmin = area == "Admin";
+}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,6 +12,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Municipal Elections</title>
     <script type="importmap"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Municipal_Elections_Management_System.styles.css" asp-append-version="true" />
@@ -22,23 +30,23 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="@(!isAdmin && controller == "Home" ? "nav-link active" : "nav-link text-dark")" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Municipalities" asp-action="Index">Municipalities</a>
+                            <a class="@(!isAdmin && controller == "Municipalities" ? "nav-link active" : "nav-link text-dark")" asp-area="" asp-controller="Municipalities" asp-action="Index">Municipalities</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Candidates" asp-action="Index">Candidates</a>
+                            <a class="@(!isAdmin && controller == "Candidates" ? "nav-link active" : "nav-link text-dark")" asp-area="" asp-controller="Candidates" asp-action="Index">Candidates</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="VotingGuide" asp-action="Index">
+                            <a class="@(controller == "VotingGuide" ? "nav-link active" : "nav-link text-dark")" asp-area="" asp-controller="VotingGuide" asp-action="Index">
                                 My Guide <span class="badge rounded-pill bg-success">@VotingGuide.GetIds().Count</span>
                             </a>
                         </li>
                         @if (User.Identity?.IsAuthenticated == true)
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="Admin" asp-controller="Dashboard" asp-action="Index">Admin</a>
+                                <a class="@(isAdmin ? "nav-link active" : "nav-link text-dark")" asp-area="Admin" asp-controller="Dashboard" asp-action="Index">Admin</a>
                             </li>
                         }
                     </ul>
