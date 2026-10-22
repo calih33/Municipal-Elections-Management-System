@@ -10,7 +10,7 @@ using Municipal_Elections_Management_System.Services;
 namespace Municipal_Elections_Management_System.Areas.Admin.Controllers;
 
 [Area("Admin")]
-[Authorize]
+[Authorize(Policy = AppRoles.AdminPolicy)]
 public class PositionsController : Controller
 {
     private readonly ApplicationDbContext _context;

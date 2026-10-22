@@ -62,6 +62,8 @@ MAJOR CHALLENGES
 
 TESTING INSTRUCTIONS
 1. Copy appsettings.Development.example.json to appsettings.Development.json
+   (it has the connection string and a development Jwt:Key; the app won't
+   start without a Jwt:Key of at least 32 characters)
 2. Run:  dotnet run
    The database is created, migrated and seeded on startup.
 3. Public site:
@@ -72,6 +74,10 @@ TESTING INSTRUCTIONS
    - pm can only see and manage Pitt Meadows positions and candidates, and can
      edit the Pitt Meadows municipality but can't create or delete them.
 5. Image uploads only accept .jpg, .jpeg, .png or .webp files up to 2 MB.
+6. Mobile app API (COMP4977): the endpoints are listed in docs/api-endpoints.md
+   and can be tried with Municipal-Elections-Management-System.http.
+   Accounts registered through the API have no admin group, so they get
+   "Access denied" if they sign in to the website's Admin area.
 
 
 DEPLOYED APPLICATION ON AZURE

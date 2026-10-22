@@ -1,4 +1,6 @@
 ﻿@inject VotingGuideService VotingGuide
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
 @{
     // which tab is open, used to highlight it in the navbar
     var area = ViewContext.RouteData.Values["area"]?.ToString();
@@ -55,7 +57,8 @@
                                 My Guide <span class="badge rounded-pill bg-success">@VotingGuide.GetIds().Count</span>
                             </a>
                         </li>
-                        @if (User.Identity?.IsAuthenticated == true)
+                        @* only admin group members; mobile app accounts have no roles *@
+                        @if ((await AuthorizationService.AuthorizeAsync(User, Municipal_Elections_Management_System.Data.AppRoles.AdminPolicy)).Succeeded)
                         {
                             <li class="nav-item">
                                 <a class="@(isAdmin ? "nav-link active" : "nav-link text-body")" asp-area="Admin" asp-controller="Dashboard" asp-action="Index">Admin</a>
