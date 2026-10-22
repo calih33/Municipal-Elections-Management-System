@@ -21,10 +21,9 @@ An ASP.NET Core MVC site for municipal elections (next election: October 17, 202
 
 | Folder | Contents |
 |---|---|
-| `Models/` | EF entities: `Municipality`, `Position`, `Candidate` |
-| `ViewModels/` | Form and page models (anything with `IFormFile`, dropdown lists, search filters) |
+| `Models/` | EF entities: `Municipality`, `Position`, `Candidate` (uploads bind to `[NotMapped]` `LogoFile` / `PhotoFile`) |
 | `Data/` | `ApplicationDbContext`, `SeedData`, `AppRoles` |
-| `Services/` | Application services, e.g. `MunicipalityAccessService` |
+| `Services/` | `MunicipalityAccessService`, `ImageStorageService`, `VotingGuideService` |
 | `Controllers/` + `Views/` | Public site |
 | `Areas/Admin/` | Admin controllers and views |
 | `Areas/Identity/` | Overridden Identity pages (username login, disabled register) |
@@ -33,7 +32,8 @@ An ASP.NET Core MVC site for municipal elections (next election: October 17, 202
 ## Conventions
 
 - Namespace root is `Municipal_Elections_Management_System` (underscores). Use file-scoped namespaces.
-- PascalCase for types, members, and files; `_camelCase` is not used – inject dependencies with primary constructors.
+- PascalCase for types, members, and files. Inject dependencies through a constructor into `private readonly` `_camelCase` fields (`_context`, `_access`, `_images`).
+- Short lowercase comments above actions and non-obvious blocks (`// GET: Admin/Positions`, `// admins only`).
 - Nullable reference types are enabled. Don't silence warnings with `!` unless the value is guaranteed.
 - Async all the way: EF calls use `ToListAsync`, `FirstOrDefaultAsync`, `SaveChangesAsync`; method names end in `Async` except controller actions.
 - Use the spec's spelling of positions: "Mayor", "Councilor", "School Trustee".
@@ -59,10 +59,10 @@ An ASP.NET Core MVC site for municipal elections (next election: October 17, 202
 
 ## Validation
 
-- Put data annotations on entities and view models; the same attributes drive client and server validation.
+- Put data annotations on the entities; the same attributes drive client and server validation.
 - Every form view includes `<partial name="_ValidationScriptsPartial" />` in `@section Scripts` and an `asp-validation-summary`.
 - Every POST action has `[ValidateAntiForgeryToken]` and checks `ModelState.IsValid` before saving.
-- Image uploads: `.jpg`, `.jpeg`, `.png`, `.webp` only, max 2 MB, validated on both client and server.
+- Image uploads: `.jpg`, `.jpeg`, `.png`, `.webp` only, max 2 MB, checked in the browser by `wwwroot/js/image-validation.js` and on the server by `ImageStorageService.CheckImage` (see the `image-upload` skill).
 
 ## UI
 
@@ -75,5 +75,5 @@ An ASP.NET Core MVC site for municipal elections (next election: October 17, 202
 
 - Don't add packages without a clear need; prefer what ASP.NET Core already provides.
 - Don't scaffold the full Identity UI; only override the pages we need.
-- Don't use `ViewBag` for data that a view model can carry.
+- Don't put anything but dropdown `SelectList`s and simple counts in `ViewData`/`ViewBag`.
 - Don't catch and swallow exceptions.

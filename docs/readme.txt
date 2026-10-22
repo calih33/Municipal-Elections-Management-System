@@ -44,8 +44,7 @@ WHAT HAS NOT BEEN COMPLETED
 
 MAJOR CHALLENGES
 - Our branches split early on (dev and main had different models), so we had to
-  move everything onto one main branch and redo the Cadida
-  pages.
+  move everything onto one main branch and redo the Candidate pages.
 - Making sure a municipality admin can only manage their own municipality.
 - Image uploads: checking the file type and size in both the browser and on the
   server, and saving files outside wwwroot on Azure so they are not lost when
