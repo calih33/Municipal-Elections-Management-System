@@ -9,16 +9,7 @@ html {
 }
 
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #9FB4D8;
-}
-
-html {
-  position: relative;
-  min-height: 100%;
-}
-
-body {
-  margin-bottom: 60px;
+  box-shadow: 0 0 0 0.1rem var(--bs-body-bg), 0 0 0 0.25rem #9FB4D8;
 }
 
 .form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
@@ -92,4 +83,70 @@ body {
   color: #FFFFFF;
   background-color: #2E4A7E;
   border-radius: 8px;
+}
+
+/* ---------- dark mode (bonus) ----------
+   must come after the :root colours above, otherwise they win over bootstrap's dark theme */
+[data-bs-theme="dark"] {
+  --bs-body-color: #E3E9F4;
+  --bs-body-color-rgb: 227, 233, 244;
+  --bs-body-bg: #0F1729;
+  --bs-body-bg-rgb: 15, 23, 41;
+  --bs-secondary-color: #A3B1C7;
+  --bs-secondary-bg: #1C2943;
+  --bs-tertiary-bg: #17223A;
+  --bs-tertiary-bg-rgb: 23, 34, 58;
+  --bs-border-color: #2C3B59;
+  --bs-primary: #5B7DBA;
+  --bs-primary-rgb: 91, 125, 186;
+  --bs-link-color: #9FB8E6;
+  --bs-link-color-rgb: 159, 184, 230;
+  --bs-link-hover-color: #C3D3F0;
+  --bs-link-hover-color-rgb: 195, 211, 240;
+}
+
+[data-bs-theme="dark"] .card {
+  --bs-card-bg: var(--bs-tertiary-bg);
+}
+
+[data-bs-theme="dark"] .btn-secondary {
+  --bs-btn-color: #D5DEEC;
+  --bs-btn-bg: #1C2943;
+  --bs-btn-border-color: #34466A;
+  --bs-btn-hover-color: #FFFFFF;
+  --bs-btn-hover-bg: #24345A;
+  --bs-btn-hover-border-color: #4A5F8A;
+  --bs-btn-active-color: #FFFFFF;
+  --bs-btn-active-bg: #2A3C63;
+  --bs-btn-active-border-color: #4A5F8A;
+}
+
+[data-bs-theme="dark"] .btn-info {
+  --bs-btn-color: #C3D3F0;
+  --bs-btn-bg: #1E2D4D;
+  --bs-btn-border-color: #34466A;
+  --bs-btn-hover-color: #FFFFFF;
+  --bs-btn-hover-bg: #263A61;
+  --bs-btn-hover-border-color: #4A5F8A;
+  --bs-btn-active-color: #FFFFFF;
+  --bs-btn-active-bg: #263A61;
+  --bs-btn-active-border-color: #4A5F8A;
+}
+
+/* the placeholder images are light grey, tone them down on a dark page */
+[data-bs-theme="dark"] img[src*="placeholder-"] {
+  filter: brightness(0.7);
+}
+
+/* toggle shows a moon in light mode and a sun in dark mode */
+.theme-toggle .icon-sun {
+  display: none;
+}
+
+[data-bs-theme="dark"] .theme-toggle .icon-sun {
+  display: inline;
+}
+
+[data-bs-theme="dark"] .theme-toggle .icon-moon {
+  display: none;
 }

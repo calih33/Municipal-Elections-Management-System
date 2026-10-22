@@ -35,17 +35,23 @@ Isaac Kehler
   manage.
 - .gitignore (appsettings.Development.json is not committed).
 - GitHub Copilot prompt, instructions and skills files (.github folder).
+- Dark mode (bonus feature).
 
 
 WHAT HAS NOT BEEN COMPLETED
 - All required features are completed.
-- No optional bonus features were added.
+
+
+BONUS FEATURES
+- Dark mode: a sun/moon button in the navbar switches between light and dark
+  themes on every page, including the admin area. The first visit follows the
+  device's light/dark setting, and the choice is remembered in the browser
+  (localStorage). The printable voting guide always prints in light mode.
 
 
 MAJOR CHALLENGES
 - Our branches split early on (dev and main had different models), so we had to
-  move everything onto one main branch and redo the Cadida
-  pages.
+  move everything onto one main branch and redo the Candidate pages.
 - Making sure a municipality admin can only manage their own municipality.
 - Image uploads: checking the file type and size in both the browser and on the
   server, and saving files outside wwwroot on Azure so they are not lost when

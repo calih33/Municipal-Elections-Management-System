@@ -11,7 +11,7 @@ Deliverables:
 
 1. `Areas/Admin/Controllers/${input:entity}sController.cs` with Index, Details, Create (GET/POST), Edit (GET/POST), Delete (GET) and DeleteConfirmed (POST).
 2. Views in `Areas/Admin/Views/${input:entity}s/` for each GET action, using Bootstrap cards/tables.
-3. A view model in `ViewModels/` if the form needs dropdowns or a file upload.
+3. Dropdowns loaded into `ViewData` by a private helper (scoped to manageable municipalities); a `[NotMapped]` `IFormFile` on the entity if the form uploads an image (see the `image-upload` skill).
 4. A link to the new pages in the admin navigation.
 
 Before finishing, check:
