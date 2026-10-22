@@ -69,7 +69,8 @@ TESTING INSTRUCTIONS
 
 
 DEPLOYED APPLICATION ON AZURE
-URL: 
+URL: https://mems-isaac-cali-bfgehyf7f0h0fbhm.westus3-01.azurewebsites.net/
+
 
 GITHUB REPOSITORY
 https://github.com/calih33/Municipal-Elections-Management-System
