@@ -22,6 +22,8 @@ Cali Heung
     (with photo upload)
   - Image upload checks (type and size) on the client and the server
   - Super Admin / municipality admin checks on every admin page
+- Site colours, navbar tab highlight and login / logout buttons.
+- Azure App Service deployment.
 - ERD (in the documentation PDF)
 
 Isaac Kehler
