@@ -1,4 +1,3 @@
-// This file contains the admin MunicipalitiesController class for the Municipal Elections Management System.
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -60,6 +59,7 @@ public class MunicipalitiesController : Controller
             return NotFound();
         }
 
+        // not this admin's municipality
         if (!await _access.CanManageAsync(User, municipality.MunicipalityId))
         {
             return Forbid();
@@ -85,9 +85,18 @@ public class MunicipalitiesController : Controller
         // admin group, e.g. "Surrey Admin"
         var roleName = AppRoles.ForMunicipality(municipality.Name);
 
-        if (await _context.Municipalities.AnyAsync(m => m.Name == municipality.Name || m.AdminRoleName == roleName))
+        // lower case so "surrey" and "Surrey" count as the same name
+        var name = municipality.Name.Trim().ToLower();
+        var role = roleName.ToLower();
+
+        if (await _context.Municipalities.AnyAsync(m => m.Name.ToLower() == name))
         {
             ModelState.AddModelError("Name", "A municipality with this name already exists.");
+        }
+        else if (await _context.Municipalities.AnyAsync(m => m.AdminRoleName.ToLower() == role))
+        {
+            // a renamed municipality can still use this admin group name
+            ModelState.AddModelError("Name", $"The admin group \"{roleName}\" is already used by another municipality.");
         }
 
         // server check for the logo
@@ -109,8 +118,8 @@ public class MunicipalitiesController : Controller
             _context.Add(municipality);
             await _context.SaveChangesAsync();
 
-            // create the admin group role
-            if (!await _roleManager.RoleExistsAsync(roleName))
+            // create the admin group role (same as the seed identity lecture)
+            if (await _roleManager.FindByNameAsync(roleName) == null)
             {
                 await _roleManager.CreateAsync(new IdentityRole(roleName));
             }
@@ -136,6 +145,7 @@ public class MunicipalitiesController : Controller
             return NotFound();
         }
 
+        // not this admin's municipality
         if (!await _access.CanManageAsync(User, municipality.MunicipalityId))
         {
             return Forbid();
@@ -166,7 +176,9 @@ public class MunicipalitiesController : Controller
             return NotFound();
         }
 
-        if (await _context.Municipalities.AnyAsync(m => m.Name == municipality.Name && m.MunicipalityId != id))
+        // lower case so "surrey" and "Surrey" count as the same name
+        var name = municipality.Name.Trim().ToLower();
+        if (await _context.Municipalities.AnyAsync(m => m.Name.ToLower() == name && m.MunicipalityId != id))
         {
             ModelState.AddModelError("Name", "A municipality with this name already exists.");
         }
@@ -186,14 +198,20 @@ public class MunicipalitiesController : Controller
             existing.ElectionDate = municipality.ElectionDate;
             existing.Description = municipality.Description;
 
-            // replace the old logo
+            // new logo picked, save it
+            var oldLogo = existing.LogoFileName;
             if (municipality.LogoFile != null)
             {
-                _images.Delete(existing.LogoFileName);
                 existing.LogoFileName = await _images.SaveAsync(municipality.LogoFile, "logos");
             }
 
             await _context.SaveChangesAsync();
+
+            // delete the old logo only after the save worked
+            if (municipality.LogoFile != null)
+            {
+                _images.Delete(oldLogo);
+            }
 
             TempData["Message"] = $"{existing.Name} was updated.";
             return RedirectToAction(nameof(Index));
@@ -240,15 +258,15 @@ public class MunicipalitiesController : Controller
 
         if (municipality != null)
         {
-            // positions and candidates get deleted too, remove their photos
+            _context.Municipalities.Remove(municipality);
+            await _context.SaveChangesAsync();
+
+            // positions and candidates got deleted too, remove their photos and the logo
             foreach (var candidate in municipality.Positions.SelectMany(p => p.Candidates))
             {
                 _images.Delete(candidate.PhotoFileName);
             }
             _images.Delete(municipality.LogoFileName);
-
-            _context.Municipalities.Remove(municipality);
-            await _context.SaveChangesAsync();
 
             // delete its admin group
             var role = await _roleManager.FindByNameAsync(municipality.AdminRoleName);

@@ -1,4 +1,3 @@
-// This file contains the MunicipalitiesController class for the Municipal Elections Management System.
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Municipal_Elections_Management_System.Data;
@@ -36,7 +35,6 @@ public class MunicipalitiesController : Controller
 
         var municipality = await _context.Municipalities
             .Include(m => m.Positions)
-                .ThenInclude(p => p.Candidates)
             .FirstOrDefaultAsync(m => m.MunicipalityId == id);
 
         if (municipality == null)

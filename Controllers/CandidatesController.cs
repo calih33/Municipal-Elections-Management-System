@@ -1,4 +1,3 @@
-// This file contains the CandidatesController class for the Municipal Elections Management System.
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -47,7 +46,7 @@ public class CandidatesController : Controller
             await _context.Municipalities.OrderBy(m => m.Name).ToListAsync(),
             "MunicipalityId", "Name", municipalityId);
 
-        var positions = _context.Positions.Include(p => p.Municipality).AsQueryable();
+        var positions = _context.Positions.AsQueryable();
         // only that municipality's positions
         if (municipalityId != null)
         {

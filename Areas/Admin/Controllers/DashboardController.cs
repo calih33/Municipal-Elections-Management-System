@@ -1,4 +1,3 @@
-// This file contains the admin DashboardController class for the Municipal Elections Management System.
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;

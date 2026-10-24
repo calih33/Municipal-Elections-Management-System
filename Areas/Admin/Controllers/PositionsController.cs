@@ -1,4 +1,3 @@
-// This file contains the admin PositionsController class for the Municipal Elections Management System.
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -15,7 +14,7 @@ public class PositionsController : Controller
 {
     private readonly ApplicationDbContext _context;
     private readonly IMunicipalityAccessService _access;
-    private readonly ImageStorageService _images;
+    private readonly ImageStorageService _images; // to delete candidate photos
 
     public PositionsController(ApplicationDbContext context, IMunicipalityAccessService access, ImageStorageService images)
     {
@@ -27,7 +26,7 @@ public class PositionsController : Controller
     // GET: Admin/Positions
     public async Task<IActionResult> Index()
     {
-        // only this admin's municipalities
+        // positions in this admin's municipalities
         var ids = await _access.GetManageableMunicipalityIdsAsync(User);
 
         var positions = await _context.Positions
@@ -59,6 +58,7 @@ public class PositionsController : Controller
             return NotFound();
         }
 
+        // not this admin's municipality
         if (!await _access.CanManageAsync(User, position.MunicipalityId!.Value))
         {
             return Forbid();
@@ -119,6 +119,7 @@ public class PositionsController : Controller
             return NotFound();
         }
 
+        // not this admin's municipality
         if (!await _access.CanManageAsync(User, position.MunicipalityId!.Value))
         {
             return Forbid();
@@ -196,6 +197,7 @@ public class PositionsController : Controller
             return NotFound();
         }
 
+        // not this admin's municipality
         if (!await _access.CanManageAsync(User, position.MunicipalityId!.Value))
         {
             return Forbid();
@@ -215,19 +217,20 @@ public class PositionsController : Controller
 
         if (position != null)
         {
+            // not this admin's municipality
             if (!await _access.CanManageAsync(User, position.MunicipalityId!.Value))
             {
                 return Forbid();
             }
 
-            // candidates get deleted too, remove their photos
+            _context.Positions.Remove(position);
+            await _context.SaveChangesAsync();
+
+            // candidates got deleted too, remove their photos
             foreach (var candidate in position.Candidates)
             {
                 _images.Delete(candidate.PhotoFileName);
             }
-
-            _context.Positions.Remove(position);
-            await _context.SaveChangesAsync();
 
             TempData["Message"] = $"{position.Name} was deleted.";
         }

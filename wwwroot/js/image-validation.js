@@ -19,7 +19,7 @@ document.querySelectorAll("input[type=file]").forEach(function (input) {
 
         if (!goodType) {
             message.textContent = "Only .jpg, .jpeg, .png or .webp images are allowed.";
-            input.value = "";
+            input.value = ""; // clear the bad file so it isn't uploaded
         } else if (file.size > 2 * 1024 * 1024) {
             message.textContent = "The image must be 2 MB or smaller.";
             input.value = "";

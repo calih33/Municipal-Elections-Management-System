@@ -1,4 +1,3 @@
-// This file contains the VotingGuideController class for the Municipal Elections Management System.
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Municipal_Elections_Management_System.Data;

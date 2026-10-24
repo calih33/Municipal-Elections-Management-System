@@ -1,4 +1,3 @@
-// This file contains the ImageStorageService class for the Municipal Elections Management System.
 namespace Municipal_Elections_Management_System.Services;
 
 // saves and deletes uploaded logos and photos
@@ -20,6 +19,11 @@ public class ImageStorageService
         if (file == null)
         {
             return null;
+        }
+
+        if (file.Length == 0)
+        {
+            return "The image file is empty.";
         }
 
         var extension = Path.GetExtension(file.FileName).ToLower();
@@ -56,7 +60,7 @@ public class ImageStorageService
         return folder + "/" + fileName;
     }
 
-    // delete an old image
+    // delete an image file
     public void Delete(string? fileName)
     {
         if (string.IsNullOrEmpty(fileName))

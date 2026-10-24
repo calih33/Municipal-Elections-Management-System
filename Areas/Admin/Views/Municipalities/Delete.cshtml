@@ -8,10 +8,13 @@
 <h1>@ViewData["Title"]</h1>
 <h3>Are you sure you want to delete this?</h3>
 
-<div class="alert alert-warning">
-    This will also delete its @Model.Positions.Count positions, @candidateCount candidates
-    and the "@Model.AdminRoleName" group.
-</div>
+@if (Model.Positions.Any())
+{
+    <div class="alert alert-warning">
+        This will also delete its @Model.Positions.Count positions, @candidateCount candidates
+        and the "@Model.AdminRoleName" group.
+    </div>
+}
 
 <dl class="row">
     <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Name)</dt>

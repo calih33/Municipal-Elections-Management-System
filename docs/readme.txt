@@ -22,7 +22,7 @@ Cali Heung
     (with photo upload)
   - Image upload checks (type and size) on the client and the server
   - Super Admin / municipality admin checks on every admin page
-- ERD (docs/ERD.drawio)
+- ERD (in the documentation PDF)
 
 Isaac Kehler
 - Final database design with EF Core Code First, the ApplicationDbContext,

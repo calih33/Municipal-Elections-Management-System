@@ -26,7 +26,7 @@ public class Candidate
 
     // uploaded photo, saved as a file (not a db column)
     [NotMapped]
-    [Display(Name = "Photograph")]
+    [Display(Name = "Photo")]
     public IFormFile? PhotoFile { get; set; }
 
     [Url]

@@ -1,4 +1,3 @@
-// This file contains the admin CandidatesController class for the Municipal Elections Management System.
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -27,7 +26,7 @@ public class CandidatesController : Controller
     // GET: Admin/Candidates
     public async Task<IActionResult> Index()
     {
-        // only this admin's municipalities
+        // candidates in this admin's municipalities
         var ids = await _access.GetManageableMunicipalityIdsAsync(User);
 
         var candidates = await _context.Candidates
@@ -56,6 +55,7 @@ public class CandidatesController : Controller
             return NotFound();
         }
 
+        // not this admin's municipality
         if (!await _access.CanManageAsync(User, candidate.Position!.MunicipalityId!.Value))
         {
             return Forbid();
@@ -123,6 +123,7 @@ public class CandidatesController : Controller
             return NotFound();
         }
 
+        // not this admin's municipality
         if (!await _access.CanManageAsync(User, candidate.Position!.MunicipalityId!.Value))
         {
             return Forbid();
@@ -176,14 +177,20 @@ public class CandidatesController : Controller
             existing.Website = candidate.Website;
             existing.Email = candidate.Email;
 
-            // replace the old photo
+            // new photo picked, save it
+            var oldPhoto = existing.PhotoFileName;
             if (candidate.PhotoFile != null)
             {
-                _images.Delete(existing.PhotoFileName);
                 existing.PhotoFileName = await _images.SaveAsync(candidate.PhotoFile, "candidates");
             }
 
             await _context.SaveChangesAsync();
+
+            // delete the old photo only after the save worked
+            if (candidate.PhotoFile != null)
+            {
+                _images.Delete(oldPhoto);
+            }
 
             TempData["Message"] = $"{existing.Name} was updated.";
             return RedirectToAction(nameof(Index));
@@ -209,6 +216,7 @@ public class CandidatesController : Controller
             return NotFound();
         }
 
+        // not this admin's municipality
         if (!await _access.CanManageAsync(User, candidate.Position!.MunicipalityId!.Value))
         {
             return Forbid();
@@ -226,15 +234,17 @@ public class CandidatesController : Controller
 
         if (candidate != null)
         {
+            // not this admin's municipality
             if (!await _access.CanManageAsync(User, candidate.Position!.MunicipalityId!.Value))
             {
                 return Forbid();
             }
 
-            _images.Delete(candidate.PhotoFileName);
-
             _context.Candidates.Remove(candidate);
             await _context.SaveChangesAsync();
+
+            // delete the photo after the save worked
+            _images.Delete(candidate.PhotoFileName);
 
             TempData["Message"] = $"{candidate.Name} was deleted.";
         }

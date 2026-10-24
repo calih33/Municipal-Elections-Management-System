@@ -1,4 +1,3 @@
-// This file contains the VotingGuideService class for the Municipal Elections Management System.
 namespace Municipal_Elections_Management_System.Services;
 
 // saves picked candidate ids in a cookie, no login needed
