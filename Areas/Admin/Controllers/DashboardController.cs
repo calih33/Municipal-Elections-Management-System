@@ -9,7 +9,7 @@ namespace Municipal_Elections_Management_System.Areas.Admin.Controllers;
 
 // admins only
 [Area("Admin")]
-[Authorize]
+[Authorize(Policy = AppRoles.AdminPolicy)]
 public class DashboardController : Controller
 {
     private readonly ApplicationDbContext _context;

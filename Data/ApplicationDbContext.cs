@@ -9,6 +9,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<Municipality> Municipalities => Set<Municipality>();
     public DbSet<Position> Positions => Set<Position>();
     public DbSet<Candidate> Candidates => Set<Candidate>();
+    public DbSet<SavedCandidate> SavedCandidates => Set<SavedCandidate>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -41,6 +42,22 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
                 .OnDelete(DeleteBehavior.Cascade);
 
             entity.HasIndex(c => c.Name);
+        });
+
+        builder.Entity<SavedCandidate>(entity =>
+        {
+            entity.HasOne(s => s.User)
+                .WithMany()
+                .HasForeignKey(s => s.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasOne(s => s.Candidate)
+                .WithMany()
+                .HasForeignKey(s => s.CandidateId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // A user can save each candidate only once.
+            entity.HasIndex(s => new { s.UserId, s.CandidateId }).IsUnique();
         });
     }
 }

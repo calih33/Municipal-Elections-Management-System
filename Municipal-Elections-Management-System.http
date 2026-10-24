@@ -1,0 +1,68 @@
+# Requests for the mobile API. Run them from VS Code (REST Client), Rider or Visual Studio.
+# Switch @host to the Azure URL to test the deployed API.
+@host = http://localhost:5211
+# @host = https://mems-isaac-cali-bfgehyf7f0h0fbhm.westus3-01.azurewebsites.net
+
+### Register (returns a token)
+POST {{host}}/api/auth/register
+Content-Type: application/json
+
+{
+  "name": "Jane Voter",
+  "email": "jane@example.com",
+  "password": "Passw0rd!"
+}
+
+### Login (copy the token into @token below)
+POST {{host}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "jane@example.com",
+  "password": "Passw0rd!"
+}
+
+###
+@token = paste-token-here
+
+### Current user
+GET {{host}}/api/auth/me
+Authorization: Bearer {{token}}
+
+### Municipalities
+GET {{host}}/api/municipalities
+
+### One municipality
+GET {{host}}/api/municipalities/1
+
+### Positions (optional ?municipalityId=)
+GET {{host}}/api/positions?municipalityId=1
+
+### One position
+GET {{host}}/api/positions/1
+
+### Candidates (optional ?municipalityId= & positionId=)
+GET {{host}}/api/candidates?municipalityId=1
+
+### Search candidates by name
+GET {{host}}/api/candidates/search?name=chen
+
+### One candidate
+GET {{host}}/api/candidates/11
+
+### My voting guide
+GET {{host}}/api/savedcandidates
+Authorization: Bearer {{token}}
+
+### Add a candidate to my voting guide
+POST {{host}}/api/savedcandidates
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "candidateId": 11
+}
+
+### Remove from my voting guide (savedCandidateId)
+DELETE {{host}}/api/savedcandidates/1
+Authorization: Bearer {{token}}

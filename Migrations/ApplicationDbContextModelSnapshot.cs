@@ -324,6 +324,32 @@ namespace Municipal_Elections_Management_System.Migrations
                     b.ToTable("Positions");
                 });
 
+            modelBuilder.Entity("Municipal_Elections_Management_System.Models.SavedCandidate", b =>
+                {
+                    b.Property<int>("SavedCandidateId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("CandidateId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("DateSaved")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("SavedCandidateId");
+
+                    b.HasIndex("CandidateId");
+
+                    b.HasIndex("UserId", "CandidateId")
+                        .IsUnique();
+
+                    b.ToTable("SavedCandidates");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -395,6 +421,25 @@ namespace Municipal_Elections_Management_System.Migrations
                         .IsRequired();
 
                     b.Navigation("Municipality");
+                });
+
+            modelBuilder.Entity("Municipal_Elections_Management_System.Models.SavedCandidate", b =>
+                {
+                    b.HasOne("Municipal_Elections_Management_System.Models.Candidate", "Candidate")
+                        .WithMany()
+                        .HasForeignKey("CandidateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Candidate");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Municipal_Elections_Management_System.Models.Municipality", b =>

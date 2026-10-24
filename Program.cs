@@ -1,6 +1,9 @@
+using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
+using Microsoft.IdentityModel.JsonWebTokens;
+using Microsoft.IdentityModel.Tokens;
 using Municipal_Elections_Management_System.Data;
 using Municipal_Elections_Management_System.Services;
 
@@ -20,6 +23,40 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options =>
     })
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
+
+// JWT for the mobile app API. Added as an extra scheme so the cookie login stays the
+// default for the website; API controllers opt in with
+// [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)].
+var jwtSettings = builder.Configuration.GetSection("Jwt").Get<JwtSettings>() ?? new JwtSettings();
+if (jwtSettings.Key.Length < 32)
+{
+    throw new InvalidOperationException(
+        "Jwt:Key must be at least 32 characters. Set it in appsettings.Development.json locally " +
+        "(see the .example file) or as the Jwt__Key app setting on Azure.");
+}
+builder.Services.AddSingleton(jwtSettings);
+builder.Services.AddSingleton<JwtTokenService>();
+
+builder.Services.AddAuthentication()
+    .AddJwtBearer(options =>
+    {
+        // keep claim names as they are in the token ("sub", "email", "name")
+        options.MapInboundClaims = false;
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidIssuer = jwtSettings.Issuer,
+            ValidAudience = jwtSettings.Audience,
+            IssuerSigningKey = jwtSettings.SigningKey,
+            NameClaimType = JwtRegisteredClaimNames.Name,
+            ClockSkew = TimeSpan.FromMinutes(1),
+        };
+    });
+
+// Admin area: must be in an admin group (Super Admin or a municipality admin group)
+builder.Services.AddAuthorizationBuilder()
+    .AddPolicy(AppRoles.AdminPolicy, policy => policy
+        .RequireAuthenticatedUser()
+        .RequireAssertion(context => context.User.HasClaim(c => c.Type == ClaimTypes.Role)));
 
 builder.Services.AddScoped<IMunicipalityAccessService, MunicipalityAccessService>();
 
